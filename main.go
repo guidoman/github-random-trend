@@ -2,11 +2,11 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -22,9 +22,13 @@ type Trend struct {
 
 func main() {
 	router := mux.NewRouter()
-	router.HandleFunc("/api/v1", getRandomTrendHandler).Methods("GET")
-	port := "8080"
-	fmt.Printf("Listening http on port %s", port)
+	router.HandleFunc("/repo", getRandomTrendHandler).Methods("GET")
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+	log.Printf("Listening http on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, router))
 }
 
@@ -33,14 +37,14 @@ func getRandomTrendHandler(outResp http.ResponseWriter, inReq *http.Request) {
 	if err != nil {
 		outResp.WriteHeader(http.StatusInternalServerError)
 		outResp.Write([]byte(err.Error()))
+		return
 	}
 	apiOutReq.Header.Add("Accept", "application/json")
 	outQuery := apiOutReq.URL.Query()
 	inReqQueryValues := inReq.URL.Query()
-	for k, v := range inReqQueryValues {
-		fmt.Println("k:", k, "v:", v)
-		if k != "redirect" {
-			outQuery.Add(k, v[0])
+	for paramName, paramValue := range inReqQueryValues {
+		if paramName != "redirect" {
+			outQuery.Add(paramName, paramValue[0])
 		}
 	}
 	apiOutReq.URL.RawQuery = outQuery.Encode()
@@ -49,19 +53,23 @@ func getRandomTrendHandler(outResp http.ResponseWriter, inReq *http.Request) {
 	if err != nil {
 		outResp.WriteHeader(http.StatusInternalServerError)
 		outResp.Write([]byte(err.Error()))
+		return
 	}
 	defer apiResp.Body.Close()
 	apiRespBody, err := ioutil.ReadAll(apiResp.Body)
 	if err != nil {
 		outResp.WriteHeader(http.StatusInternalServerError)
 		outResp.Write([]byte(err.Error()))
+		return
 	}
 	var trendsArray []Trend
 	err = json.Unmarshal(apiRespBody, &trendsArray)
 	if err != nil {
 		outResp.WriteHeader(http.StatusInternalServerError)
 		outResp.Write([]byte(err.Error()))
+		return
 	}
+	// TODO random seed
 	rndIndex := rand.Intn(len(trendsArray))
 	rndURL := trendsArray[rndIndex].URL
 	redirect := false
