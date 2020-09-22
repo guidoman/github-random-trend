@@ -15,12 +15,14 @@ This API accepts an additional parameter named `redirect`:
 The API is currently deployed on Google Cloud App Engine.
 
 ## Examples
-Redirect to random Python repository trending this week:  https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?language=python&since=week&redirect=true
+Get the URL of a random repository:  <a href="https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo" target="_blank">https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?redirect=true</a>
 
-Get the URL of a random trending Italian-speaking repository: https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?spoken_language_code=it
+Redirect to random Python repository trending this week:  <a href="https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?language=python&since=week&redirect=true" target="_blank">https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?language=python&since=week&redirect=true</a>
 
-## Suggestions
-Try the magic of [serendipity](https://en.wikipedia.org/wiki/Serendipity). Set the home page of your browser to this API URL (with `redirect=true`). Everytime you open a new tab or page you will discover and learn something new:
+Get the URL of a random trending Italian-speaking repository: <a href="https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?spoken_language_code=it" target="_blank">https://github-random-trend-dot-guidoc-tech.oa.r.appspot.com/repo?spoken_language_code=it</a>
+
+## Usage suggestions
+You could, for example, set the home page of your browser to this API URL (with `redirect=true`). Everytime you open a new tab or page you will discover and learn something new:
 - frameworks, libraries, applications
 - ideas
 - company or developer
